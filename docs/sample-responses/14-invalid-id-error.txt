@@ -1,0 +1,6 @@
+// GET http://localhost:5000/api/products/123
+// Response: 400 Bad Request
+{
+  "success": false,
+  "message": "Invalid product id: 123"
+}

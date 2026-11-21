@@ -1,0 +1,25 @@
+// POST http://localhost:5000/api/products
+// Body: {"name":"Incomplete","price":-5}
+// Response: 400 Bad Request
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "sku",
+      "message": "sku is required"
+    },
+    {
+      "field": "category",
+      "message": "category is required"
+    },
+    {
+      "field": "quantity",
+      "message": "quantity is required"
+    },
+    {
+      "field": "price",
+      "message": "price cannot be negative"
+    }
+  ]
+}

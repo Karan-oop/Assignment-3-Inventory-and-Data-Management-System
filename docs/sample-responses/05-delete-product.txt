@@ -1,0 +1,6 @@
+// DELETE http://localhost:5000/api/products/6af31b4488d928d3899b9439
+// Response: 200 OK
+{
+  "message": "Product deleted",
+  "id": "6af31b4488d928d3899b9439"
+}

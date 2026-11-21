@@ -1,0 +1,510 @@
+{
+  "info": {
+    "name": "Inventory and Data Management System API",
+    "description": "Lab 3 - Web Dev III. Run `npm run seed` then `npm start` before sending requests. 'Create Product' stores the new id in {{productId}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "productId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Products (CRUD)",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Has pagination fields', () => pm.expect(b).to.include.keys('total','page','totalPages','count','products'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test('Product created with id and stockValue', () => { pm.expect(b.id).to.be.a('string'); pm.expect(b.stockValue).to.eql(b.price * b.quantity); });",
+                  "pm.collectionVariables.set('productId', b.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/products",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Gel Pen Pack of 15\", \"sku\": \"STNY-PN-713\", \"category\": \"Stationery\", \"price\": 120, \"quantity\": 40, \"reorderLevel\": 20, \"supplier\": \"Cello Pens\" }"
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products/{{productId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Returns the requested product', () => pm.expect(b.id).to.eql(pm.collectionVariables.get('productId')));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/products/{{productId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Gel Pen Pack of 15\", \"sku\": \"STNY-PN-713\", \"category\": \"Stationery\", \"price\": 140, \"quantity\": 60 }"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Fields updated', () => { pm.expect(b.price).to.eql(140); pm.expect(b.quantity).to.eql(60); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stock Adjustment - Restock (+10)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/products/{{productId}}/stock",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"change\": 10\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Quantity increased to 70', () => pm.expect(b.product.quantity).to.eql(70));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stock Adjustment - Sale (3)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/products/{{productId}}/stock",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"sale\",\n  \"amount\": 3\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Quantity decreased to 67', () => pm.expect(b.product.quantity).to.eql(67));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Oversell (400 Insufficient stock)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/products/{{productId}}/stock",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"change\": -100000 }"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 400', () => pm.response.to.have.status(400));",
+                  "const b = pm.response.json();",
+                  "pm.test('Insufficient stock message', () => pm.expect(b.message).to.include('Insufficient stock'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/products/{{productId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Delete confirmation', () => pm.expect(b.message).to.eql('Product deleted'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Deleted Product (404)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products/{{productId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 404', () => pm.response.to.have.status(404));",
+                  "const b = pm.response.json();",
+                  "pm.test('Error format', () => pm.expect(b.success).to.eql(false));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reports (Aggregation)",
+      "item": [
+        {
+          "name": "Low-Stock Alert Report",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products/low-stock"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Every item at or below reorder level', () => b.lowStockItems.forEach(p => pm.expect(p.quantity).to.be.at.most(p.reorderLevel)));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Low-Stock (threshold 5, Electronics)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products/low-stock?threshold=5&category=Electronics"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Only Electronics with qty <= 5', () => b.lowStockItems.forEach(p => { pm.expect(p.category).to.eql('Electronics'); pm.expect(p.quantity).to.be.at.most(5); }));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Category-wise Summary",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products/summary"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Summary per category', () => { pm.expect(b.categories).to.eql(b.summary.length); b.summary.forEach(s => pm.expect(s).to.include.keys('totalItems','totalQuantity','totalStockValue','avgPrice')); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Filtering, Sorting & Pagination",
+      "item": [
+        {
+          "name": "Filter by Category",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products?category=Electronics"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Only Electronics', () => b.products.forEach(p => pm.expect(p.category).to.eql('Electronics')));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Price Range, Sorted by Price Desc",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products?minPrice=500&maxPrice=5000&sort=-price"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Within range and sorted desc', () => { b.products.forEach(p => pm.expect(p.price).to.be.within(500, 5000)); for (let i = 1; i < b.products.length; i++) pm.expect(b.products[i-1].price).to.be.at.least(b.products[i].price); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products?search=pen"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Results match \"pen\"', () => b.products.forEach(p => pm.expect((p.name + p.sku + p.supplier).toLowerCase()).to.include('pen')));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pagination (page 2, limit 5, sort by name)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products?page=2&limit=5&sort=name"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Page 2 with at most 5 items', () => { pm.expect(b.page).to.eql(2); pm.expect(b.count).to.be.at.most(5); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "In Stock Only, Sorted by Quantity",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products?inStock=true&sort=quantity"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('All in stock, ascending quantity', () => { b.products.forEach(p => pm.expect(p.quantity).to.be.above(0)); for (let i = 1; i < b.products.length; i++) pm.expect(b.products[i-1].quantity).to.be.at.most(b.products[i].quantity); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Error Handling Examples",
+      "item": [
+        {
+          "name": "Validation Error (missing fields)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/products",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Incomplete\", \"price\": -5 }"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 400', () => pm.response.to.have.status(400));",
+                  "const b = pm.response.json();",
+                  "pm.test('Lists field errors', () => { pm.expect(b.message).to.eql('Validation failed'); pm.expect(b.errors.length).to.be.above(0); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Duplicate SKU (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/products",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Another Table\", \"sku\": \"FURN-TB-812\", \"category\": \"Furniture\", \"price\": 100, \"quantity\": 1 }"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 409', () => pm.response.to.have.status(409));",
+                  "const b = pm.response.json();",
+                  "pm.test('Duplicate message', () => pm.expect(b.message).to.include('Duplicate'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid ID (400)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products/123"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 400', () => pm.response.to.have.status(400));",
+                  "const b = pm.response.json();",
+                  "pm.test('Invalid id message', () => pm.expect(b.message).to.include('Invalid product id'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

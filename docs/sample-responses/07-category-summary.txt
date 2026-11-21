@@ -1,0 +1,63 @@
+// GET http://localhost:5000/api/products/summary
+// Response: 200 OK
+{
+  "categories": 5,
+  "summary": [
+    {
+      "_id": "Electronics",
+      "totalItems": 4,
+      "totalQuantity": 96,
+      "totalStockValue": 182904,
+      "avgPrice": 5149,
+      "minPrice": 799,
+      "maxPrice": 14999,
+      "lowStockCount": 1
+    },
+    {
+      "_id": "Furniture",
+      "totalItems": 2,
+      "totalQuantity": 11,
+      "totalStockValue": 75489,
+      "avgPrice": 5749,
+      "minPrice": 3999,
+      "maxPrice": 7499,
+      "lowStockCount": 1
+    },
+    {
+      "_id": "Apparel",
+      "totalItems": 2,
+      "totalQuantity": 66,
+      "totalStockValue": 43734,
+      "avgPrice": 1399,
+      "minPrice": 499,
+      "maxPrice": 2299,
+      "lowStockCount": 1
+    },
+    {
+      "_id": "Grocery",
+      "totalItems": 2,
+      "totalQuantity": 65,
+      "totalStockValue": 35935,
+      "avgPrice": 524,
+      "minPrice": 399,
+      "maxPrice": 649,
+      "lowStockCount": 0
+    },
+    {
+      "_id": "Stationery",
+      "totalItems": 2,
+      "totalQuantity": 132,
+      "totalStockValue": 31080,
+      "avgPrice": 170,
+      "minPrice": 90,
+      "maxPrice": 250,
+      "lowStockCount": 1
+    }
+  ],
+  "overall": {
+    "totalItems": 12,
+    "totalQuantity": 370,
+    "totalStockValue": 369142,
+    "lowStockCount": 4
+  }
+}

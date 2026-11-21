@@ -1,0 +1,7 @@
+// PATCH http://localhost:5000/api/products/6af31b4450903bc6148487d2/stock
+// Body: {"change":-1000}
+// Response: 400 Bad Request
+{
+  "success": false,
+  "message": "Insufficient stock: requested 1000, only 9 available"
+}

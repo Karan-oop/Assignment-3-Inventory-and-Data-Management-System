@@ -1,0 +1,7 @@
+// POST http://localhost:5000/api/products
+// Body: {"name":"Another Table","sku":"FURN-TB-812","category":"Furniture","price":100,"quantity":1}
+// Response: 409 Conflict
+{
+  "success": false,
+  "message": "Duplicate value: a product with sku \"FURN-TB-812\" already exists"
+}

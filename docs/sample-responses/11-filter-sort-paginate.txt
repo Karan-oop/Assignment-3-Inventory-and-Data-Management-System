@@ -1,0 +1,55 @@
+// GET http://localhost:5000/api/products?category=Electronics,Furniture&minPrice=1000&sort=-price&page=1&limit=3
+// Response: 200 OK
+{
+  "total": 5,
+  "page": 1,
+  "totalPages": 2,
+  "count": 3,
+  "products": [
+    {
+      "_id": "6af31b4450903bc6148487ce",
+      "name": "27-inch LED Monitor",
+      "sku": "ELEC-MN-305",
+      "category": "Electronics",
+      "price": 14999,
+      "quantity": 3,
+      "reorderLevel": 5,
+      "supplier": "Samsung India",
+      "__v": 0,
+      "createdAt": "2026-11-10T13:25:24.295Z",
+      "updatedAt": "2026-11-10T13:25:24.295Z",
+      "stockValue": 44997,
+      "id": "6af31b4450903bc6148487ce"
+    },
+    {
+      "_id": "6af31b4450903bc6148487d3",
+      "name": "Ergonomic Office Chair",
+      "sku": "FURN-CH-905",
+      "category": "Furniture",
+      "price": 7499,
+      "quantity": 9,
+      "reorderLevel": 3,
+      "supplier": "Green Soul",
+      "__v": 0,
+      "createdAt": "2026-11-10T13:25:24.295Z",
+      "updatedAt": "2026-11-10T13:25:24.295Z",
+      "stockValue": 67491,
+      "id": "6af31b4450903bc6148487d3"
+    },
+    {
+      "_id": "6af31b4450903bc6148487d2",
+      "name": "Study Table",
+      "sku": "FURN-TB-812",
+      "category": "Furniture",
+      "price": 3999,
+      "quantity": 9,
+      "reorderLevel": 4,
+      "supplier": "IKEA India",
+      "__v": 0,
+      "createdAt": "2026-11-10T13:25:24.295Z",
+      "updatedAt": "2026-11-10T13:25:24.712Z",
+      "stockValue": 35991,
+      "id": "6af31b4450903bc6148487d2"
+    }
+  ]
+}

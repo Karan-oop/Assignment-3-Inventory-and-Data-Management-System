@@ -1,0 +1,71 @@
+// GET http://localhost:5000/api/products/low-stock
+// Response: 200 OK
+{
+  "count": 4,
+  "lowStockItems": [
+    {
+      "_id": "6af31b4450903bc6148487d2",
+      "name": "Study Table",
+      "sku": "FURN-TB-812",
+      "category": "Furniture",
+      "price": 3999,
+      "quantity": 2,
+      "reorderLevel": 4,
+      "supplier": "IKEA India",
+      "__v": 0,
+      "createdAt": "2026-11-10T13:25:24.295Z",
+      "updatedAt": "2026-11-10T13:25:24.295Z",
+      "stockValue": 7998,
+      "shortfall": 2,
+      "id": "6af31b4450903bc6148487d2"
+    },
+    {
+      "_id": "6af31b4450903bc6148487ce",
+      "name": "27-inch LED Monitor",
+      "sku": "ELEC-MN-305",
+      "category": "Electronics",
+      "price": 14999,
+      "quantity": 3,
+      "reorderLevel": 5,
+      "supplier": "Samsung India",
+      "__v": 0,
+      "createdAt": "2026-11-10T13:25:24.295Z",
+      "updatedAt": "2026-11-10T13:25:24.295Z",
+      "stockValue": 44997,
+      "shortfall": 2,
+      "id": "6af31b4450903bc6148487ce"
+    },
+    {
+      "_id": "6af31b4450903bc6148487d1",
+      "name": "Denim Jacket",
+      "sku": "APRL-JK-221",
+      "category": "Apparel",
+      "price": 2299,
+      "quantity": 6,
+      "reorderLevel": 8,
+      "supplier": "Levi's",
+      "__v": 0,
+      "createdAt": "2026-11-10T13:25:24.295Z",
+      "updatedAt": "2026-11-10T13:25:24.295Z",
+      "stockValue": 13794,
+      "shortfall": 2,
+      "id": "6af31b4450903bc6148487d1"
+    },
+    {
+      "_id": "6af31b4450903bc6148487d5",
+      "name": "Gel Pen Pack of 10",
+      "sku": "STNY-PN-611",
+      "category": "Stationery",
+      "price": 90,
+      "quantity": 12,
+      "reorderLevel": 20,
+      "supplier": "Cello Pens",
+      "__v": 0,
+      "createdAt": "2026-11-10T13:25:24.295Z",
+      "updatedAt": "2026-11-10T13:25:24.295Z",
+      "stockValue": 1080,
+      "shortfall": 8,
+      "id": "6af31b4450903bc6148487d5"
+    }
+  ]
+}

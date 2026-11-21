@@ -1,0 +1,18 @@
+// POST http://localhost:5000/api/products
+// Body: {"name":"Gel Pen Pack of 15","sku":"STNY-PN-713","category":"Stationery","price":120,"quantity":40,"reorderLevel":20,"supplier":"Cello Pens"}
+// Response: 201 Created
+{
+  "name": "Gel Pen Pack of 15",
+  "sku": "STNY-PN-713",
+  "category": "Stationery",
+  "price": 120,
+  "quantity": 40,
+  "reorderLevel": 20,
+  "supplier": "Cello Pens",
+  "_id": "6af31b4488d928d3899b9439",
+  "createdAt": "2026-11-10T13:25:24.630Z",
+  "updatedAt": "2026-11-10T13:25:24.630Z",
+  "__v": 0,
+  "stockValue": 4800,
+  "id": "6af31b4488d928d3899b9439"
+}

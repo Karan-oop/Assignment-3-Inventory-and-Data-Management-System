@@ -1,0 +1,6 @@
+// GET http://localhost:5000/api/products/6af31b4488d928d3899b9439
+// Response: 404 Not Found
+{
+  "success": false,
+  "message": "Product not found with id 6af31b4488d928d3899b9439"
+}
